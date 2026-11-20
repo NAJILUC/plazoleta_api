@@ -1,3 +1,16 @@
+server:
+  port: 8090
+
 spring:
   application:
     name: plazoleta
+  datasource:
+    url: jdbc:postgresql://localhost:5432/plazoleta
+    username: postgres
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+appDescription: "Plazoleta API"
+appVersion: "1.0"
