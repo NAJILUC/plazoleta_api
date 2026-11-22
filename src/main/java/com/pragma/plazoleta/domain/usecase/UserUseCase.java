@@ -2,6 +2,7 @@ package com.pragma.plazoleta.domain.usecase;
 
 import com.pragma.plazoleta.domain.api.IUserServicePort;
 import com.pragma.plazoleta.domain.model.User;
+import com.pragma.plazoleta.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.domain.spi.IUserPersistencePort;
 
 import java.util.List;
@@ -9,13 +10,16 @@ import java.util.List;
 public class UserUseCase implements IUserServicePort {
 
     private final IUserPersistencePort userPersistencePort;
+    private final IPasswordEncoderPort passwordEncoderPort;
 
-    public UserUseCase(IUserPersistencePort userPersistencePort) {
+    public UserUseCase(IUserPersistencePort userPersistencePort, IPasswordEncoderPort passwordEncoderPort) {
         this.userPersistencePort = userPersistencePort;
+        this.passwordEncoderPort = passwordEncoderPort;
     }
 
     @Override
     public void saveUser(User user) {
+        user.setPassword(passwordEncoderPort.encode(user.getPassword()));
         userPersistencePort.saveUser(user);
     }
 

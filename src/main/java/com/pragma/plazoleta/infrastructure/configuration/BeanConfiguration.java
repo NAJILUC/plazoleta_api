@@ -2,6 +2,7 @@ package com.pragma.plazoleta.infrastructure.configuration;
 
 import com.pragma.plazoleta.domain.api.IRoleServicePort;
 import com.pragma.plazoleta.domain.api.IUserServicePort;
+import com.pragma.plazoleta.domain.spi.IPasswordEncoderPort;
 import com.pragma.plazoleta.domain.spi.IRolePersistencePort;
 import com.pragma.plazoleta.domain.spi.IUserPersistencePort;
 import com.pragma.plazoleta.domain.usecase.RoleUseCase;
@@ -12,6 +13,7 @@ import com.pragma.plazoleta.infrastructure.output.jpa.mapper.RoleEntityMapper;
 import com.pragma.plazoleta.infrastructure.output.jpa.mapper.UserEntityMapper;
 import com.pragma.plazoleta.infrastructure.output.jpa.repository.IRoleRepository;
 import com.pragma.plazoleta.infrastructure.output.jpa.repository.IUserRepository;
+import com.pragma.plazoleta.infrastructure.security.BCryptPasswordEncoderAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +34,7 @@ public class BeanConfiguration {
 
     @Bean
     public IUserServicePort userServicePort(){
-        return new UserUseCase(userPersistencePort());
+        return new UserUseCase(userPersistencePort(), passwordEncoderPort());
     }
 
     @Bean
@@ -43,5 +45,10 @@ public class BeanConfiguration {
     @Bean
     public IRoleServicePort roleServicePort() {
         return new RoleUseCase(rolePersistencePort());
+    }
+
+    @Bean
+    public IPasswordEncoderPort passwordEncoderPort() {
+        return new BCryptPasswordEncoderAdapter();
     }
 }
