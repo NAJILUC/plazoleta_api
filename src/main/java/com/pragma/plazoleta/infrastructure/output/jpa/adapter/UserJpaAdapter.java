@@ -11,6 +11,7 @@ import com.pragma.plazoleta.infrastructure.output.jpa.repository.IUserRepository
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
@@ -64,4 +65,10 @@ public class UserJpaAdapter implements IUserPersistencePort {
         }
         return userEntityMapper.toUserList(users);
     }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email).map(userEntityMapper::toUser);
+    }
+
 }

@@ -27,11 +27,12 @@ public class UserHandler implements IUserHandler {
     private final RoleResponseMapper roleResponseMapper;
 
     @Override
-    public void saveUser(CreateUserRequest createUserRequest) {
+    public UserResponse saveUser(CreateUserRequest createUserRequest) {
         Role role = roleServicePort.getRoleById(1L);
         User user = userRequestMapper.toUser(createUserRequest);
         user.setRoleId(role.getId());
         userServicePort.saveUser(user);
+        return userResponseMapper.toUserResponse(user, role);
     }
 
     @Override

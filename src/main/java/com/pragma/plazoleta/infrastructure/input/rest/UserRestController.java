@@ -1,10 +1,11 @@
+
 package com.pragma.plazoleta.infrastructure.input.rest;
 
 import com.pragma.plazoleta.application.dto.request.CreateUserRequest;
 import com.pragma.plazoleta.application.dto.response.UserResponse;
-import com.pragma.plazoleta.application.handler.UserHandler;
+import com.pragma.plazoleta.application.dto.response.common.BasicResponse;
+import com.pragma.plazoleta.application.handler.IUserHandler;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,70 +19,127 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users/")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserRestController {
 
-    private final UserHandler userHandler;
+    private final IUserHandler userHandler;
 
     @Operation(summary = "Get all users")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "All users returned",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = UserResponse.class)))),
-            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "All users returned",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BasicResponse.class)
+                    )
+            )
     })
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = userHandler.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<BasicResponse<List<UserResponse>>> getAllUsers() {
+        return ResponseEntity.ok(
+                BasicResponse.of(userHandler.getAllUsers())
+        );
     }
 
     @Operation(summary = "Get a user by their ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User found",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
-            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BasicResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found",
+                    content = @Content
+            )
     })
-    @GetMapping("{userId}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
-        return ResponseEntity.ok(userHandler.getUserById(userId));
+    @GetMapping("/{userId}")
+    public ResponseEntity<BasicResponse<UserResponse>> getUserById(
+            @PathVariable Long userId) {
+        return ResponseEntity.ok(
+                BasicResponse.of(userHandler.getUserById(userId))
+        );
     }
 
     @Operation(summary = "Create a user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User created",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid user data", content = @Content)
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "User created",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = BasicResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid user data",
+                    content = @Content
+            )
     })
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        userHandler.saveUser(createUserRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<BasicResponse<UserResponse>> createUser(
+            @Valid @RequestBody CreateUserRequest createUserRequest) {
+
+        UserResponse userResponse = userHandler.saveUser(createUserRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(BasicResponse.of(userResponse));
     }
 
     @Operation(summary = "Update a user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User updated",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid user data", content = @Content),
-            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "User updated",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid user data",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found",
+                    content = @Content
+            )
     })
-    @PutMapping("{userId}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long userId, @RequestBody @Valid CreateUserRequest createUserRequest) {
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> updateUser(
+            @PathVariable Long userId,
+            @Valid @RequestBody CreateUserRequest createUserRequest) {
+
         userHandler.updateUser(userId, createUserRequest);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Delete a user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User deleted", content = @Content),
-            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "User deleted",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found",
+                    content = @Content
+            )
     })
-    @DeleteMapping("{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        userHandler.deleteUser(userId);
-        return ResponseEntity.ok().build();
-    }
 
+        userHandler.deleteUser(userId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

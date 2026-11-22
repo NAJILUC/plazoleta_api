@@ -1,11 +1,13 @@
 package com.pragma.plazoleta.infrastructure.configuration;
 
+import com.pragma.plazoleta.domain.api.IAuthServicePort;
 import com.pragma.plazoleta.domain.api.IRoleServicePort;
 import com.pragma.plazoleta.domain.api.IUserServicePort;
 import com.pragma.plazoleta.domain.spi.IRolePersistencePort;
 import com.pragma.plazoleta.domain.spi.IUserPersistencePort;
 import com.pragma.plazoleta.domain.spi.security.IPasswordEncoderPort;
 import com.pragma.plazoleta.domain.spi.security.ITokenProviderPort;
+import com.pragma.plazoleta.domain.usecase.AuthUseCase;
 import com.pragma.plazoleta.domain.usecase.RoleUseCase;
 import com.pragma.plazoleta.domain.usecase.UserUseCase;
 import com.pragma.plazoleta.infrastructure.output.jpa.adapter.RoleJpaAdapter;
@@ -60,5 +62,13 @@ public class BeanConfiguration {
     @Bean
     public ITokenProviderPort tokenProviderPort() {
         return new JwtTokenProviderAdapter(jwtEncoder);
+    }
+
+    @Bean
+    public IAuthServicePort authServicePort(IUserPersistencePort userPersistencePort, IPasswordEncoderPort passwordEncoderPort,
+                                            IRolePersistencePort rolePersistencePort, ITokenProviderPort tokenProviderPort) {
+
+        return new AuthUseCase(userPersistencePort, passwordEncoderPort, rolePersistencePort, tokenProviderPort
+        );
     }
 }

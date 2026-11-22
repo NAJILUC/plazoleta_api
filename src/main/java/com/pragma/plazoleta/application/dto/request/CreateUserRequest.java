@@ -1,7 +1,7 @@
 package com.pragma.plazoleta.application.dto.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,19 +12,19 @@ import java.time.LocalDate;
 @Setter
 public class CreateUserRequest {
 
-    @NotEmpty
+    @NotBlank
     private String firstName;
-    @NotEmpty
+    @NotBlank
     private String lastName;
-    @NotEmpty
+    @NotBlank
     private String identificationNumber;
-    @NotEmpty
+    @NotBlank
     private String phoneNumber;
     @NotNull
     private LocalDate birthDate;
-    @NotEmpty
+    @NotBlank
     @Email
     private String email;
-    @NotEmpty
+    @NotBlank
     private String password;
 }
