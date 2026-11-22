@@ -1,4 +1,4 @@
-package com.pragma.plazoleta.domain.spi;
+package com.pragma.plazoleta.domain.spi.security;
 
 public interface IPasswordEncoderPort {
 

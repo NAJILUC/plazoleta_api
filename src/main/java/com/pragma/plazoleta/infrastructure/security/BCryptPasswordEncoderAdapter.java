@@ -1,7 +1,7 @@
 package com.pragma.plazoleta.infrastructure.security;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.pragma.plazoleta.domain.spi.IPasswordEncoderPort;
+import com.pragma.plazoleta.domain.spi.security.IPasswordEncoderPort;
 
 public class BCryptPasswordEncoderAdapter implements IPasswordEncoderPort {
 

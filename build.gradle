@@ -28,6 +28,8 @@ dependencies {
 
     implementation 'org.mapstruct:mapstruct:1.6.3'
     implementation("at.favre.lib:bcrypt:0.10.2")
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
     runtimeOnly 'org.postgresql:postgresql'
 

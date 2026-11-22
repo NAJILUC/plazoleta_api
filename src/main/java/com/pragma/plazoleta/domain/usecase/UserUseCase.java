@@ -2,7 +2,7 @@ package com.pragma.plazoleta.domain.usecase;
 
 import com.pragma.plazoleta.domain.api.IUserServicePort;
 import com.pragma.plazoleta.domain.model.User;
-import com.pragma.plazoleta.domain.spi.IPasswordEncoderPort;
+import com.pragma.plazoleta.domain.spi.security.IPasswordEncoderPort;
 import com.pragma.plazoleta.domain.spi.IUserPersistencePort;
 
 import java.util.List;
