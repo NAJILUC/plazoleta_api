@@ -10,4 +10,6 @@ public interface IRoleRepository extends JpaRepository<RoleEntity, Long> {
     Optional<RoleEntity> findById(Long id);
 
     void deleteById(Long id);
+
+    Optional<RoleEntity> findByName(String name);
 }

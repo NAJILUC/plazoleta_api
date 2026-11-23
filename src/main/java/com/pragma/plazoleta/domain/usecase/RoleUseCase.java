@@ -5,6 +5,7 @@ import com.pragma.plazoleta.domain.model.Role;
 import com.pragma.plazoleta.domain.spi.IRolePersistencePort;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RoleUseCase implements IRoleServicePort {
 
@@ -37,5 +38,10 @@ public class RoleUseCase implements IRoleServicePort {
     @Override
     public List<Role> getAllRoles() {
         return rolePersistencePort.getAllRoles();
+    }
+
+    @Override
+    public Optional<Role> findRoleByName(String name) {
+        return rolePersistencePort.getRoleByName(name);
     }
 }

@@ -7,6 +7,7 @@ import com.pragma.plazoleta.infrastructure.output.jpa.repository.IRoleRepository
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class RoleJpaAdapter implements IRolePersistencePort {
@@ -37,5 +38,10 @@ public class RoleJpaAdapter implements IRolePersistencePort {
     @Override
     public List<Role> getAllRoles() {
         return roleEntityMapper.toRoleList(roleRepository.findAll());
+    }
+
+    @Override
+    public Optional<Role> getRoleByName(String name) {
+        return roleRepository.findByName(name).map(roleEntityMapper::toRole);
     }
 }

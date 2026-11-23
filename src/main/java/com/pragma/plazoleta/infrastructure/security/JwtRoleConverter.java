@@ -17,13 +17,9 @@ public class JwtRoleConverter implements Converter<Jwt, Collection<GrantedAuthor
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
 
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-
         Collection<GrantedAuthority> scopes = defaultConverter.convert(jwt);
 
-        if (scopes != null) {
-            authorities.addAll(scopes);
-        }
+        Collection<GrantedAuthority> authorities = new ArrayList<>(scopes);
 
         String role = jwt.getClaimAsString("role");
 

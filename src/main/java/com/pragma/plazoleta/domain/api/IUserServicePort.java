@@ -3,6 +3,7 @@ package com.pragma.plazoleta.domain.api;
 import com.pragma.plazoleta.domain.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserServicePort {
 
@@ -17,5 +18,7 @@ public interface IUserServicePort {
     List<User> getAllUsers();
 
     List<User> getUsersByRoleId(Long roleId);
+
+    Optional<User> getUserByEmail(String email);
 
 }

@@ -6,6 +6,7 @@ import com.pragma.plazoleta.domain.spi.security.IPasswordEncoderPort;
 import com.pragma.plazoleta.domain.spi.IUserPersistencePort;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserUseCase implements IUserServicePort {
 
@@ -46,5 +47,10 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public List<User> getUsersByRoleId(Long roleId) {
         return userPersistencePort.getUsersByRoleId(roleId);
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userPersistencePort.getUserByEmail(email);
     }
 }
