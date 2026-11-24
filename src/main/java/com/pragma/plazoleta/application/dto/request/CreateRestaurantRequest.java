@@ -12,6 +12,10 @@ import lombok.Setter;
 public class CreateRestaurantRequest {
 
     @NotBlank(message = "Campo obligatorio")
+    @Pattern(
+            regexp = ".*\\p{L}.*",
+            message = "El nombre debe contener al menos una letra"
+    )
     private String name;
     @NotBlank(message = "Campo obligatorio")
     @Pattern(
