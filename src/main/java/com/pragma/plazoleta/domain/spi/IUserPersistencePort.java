@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface IUserPersistencePort {
 
-    void saveUser(User user);
+    User saveUser(User user);
 
     User getUserById(Long id);
 

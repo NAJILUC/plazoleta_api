@@ -1,8 +1,6 @@
 package com.pragma.plazoleta.application.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,19 +10,27 @@ import java.time.LocalDate;
 @Setter
 public class CreateUserRequest {
 
-    @NotBlank
+    @NotBlank(message = "Campo obligatorio")
     private String firstName;
-    @NotBlank
+    @NotBlank(message = "Campo obligatorio")
     private String lastName;
-    @NotBlank
+    @NotBlank(message = "Campo obligatorio")
+    @Pattern(
+            regexp = "^[0-9]+$",
+            message = "Solo permite valores numericos")
     private String identificationNumber;
-    @NotBlank
+    @NotBlank(message = "Campo obligatorio")
+    @Size(max = 13, message = "Maximo 13 caracteres incluido el +")
+    @Pattern(
+            regexp = "^\\+?[0-9]+$",
+            message = "Solo permite valores numericos y el signo + al inicio"
+    )
     private String phoneNumber;
-    @NotNull
+    @NotNull(message = "Campo obligatorio")
     private LocalDate birthDate;
-    @NotBlank
+    @NotBlank(message = "Campo obligatorio")
     @Email
     private String email;
-    @NotBlank
+    @NotBlank(message = "Campo obligatorio")
     private String password;
 }

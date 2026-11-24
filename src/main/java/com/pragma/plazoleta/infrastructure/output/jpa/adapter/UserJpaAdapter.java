@@ -9,6 +9,7 @@ import com.pragma.plazoleta.infrastructure.output.jpa.entity.UserEntity;
 import com.pragma.plazoleta.infrastructure.output.jpa.mapper.UserEntityMapper;
 import com.pragma.plazoleta.infrastructure.output.jpa.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +21,15 @@ public class UserJpaAdapter implements IUserPersistencePort {
     private final UserEntityMapper userEntityMapper;
 
     @Override
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new UserEmailAlreadyExistException("User with email " + user.getEmail() + " already exists");
         }
-        userRepository.save(userEntityMapper.toEntity(user));
+        try {
+            return userEntityMapper.toUser(userRepository.saveAndFlush(userEntityMapper.toEntity(user)));
+        } catch (DataIntegrityViolationException exception){
+            throw new UserEmailAlreadyExistException("User with email " + user.getEmail() + " already exists");
+        }
     }
 
     @Override

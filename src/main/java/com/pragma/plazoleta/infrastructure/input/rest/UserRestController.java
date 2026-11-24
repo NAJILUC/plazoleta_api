@@ -21,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@PreAuthorize("hasRole('ADMINISTRADOR')")
 @RequiredArgsConstructor
 public class UserRestController {
 
@@ -38,7 +39,6 @@ public class UserRestController {
             )
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<BasicResponse<List<UserResponse>>> getAllUsers() {
         return ResponseEntity.ok(
                 BasicResponse.of(userHandler.getAllUsers())

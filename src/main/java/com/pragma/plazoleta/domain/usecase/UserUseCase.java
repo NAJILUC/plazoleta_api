@@ -1,10 +1,12 @@
 package com.pragma.plazoleta.domain.usecase;
 
 import com.pragma.plazoleta.domain.api.IUserServicePort;
+import com.pragma.plazoleta.domain.exception.MinorUserException;
 import com.pragma.plazoleta.domain.model.User;
 import com.pragma.plazoleta.domain.spi.security.IPasswordEncoderPort;
 import com.pragma.plazoleta.domain.spi.IUserPersistencePort;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +21,12 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public void saveUser(User user) {
+    public User saveUser(User user) {
+        if(user.getBirthDate().isAfter(LocalDate.now().minusYears(18))) {
+            throw new MinorUserException("User must be at least 18 years old");
+        }
         user.setPassword(passwordEncoderPort.encode(user.getPassword()));
-        userPersistencePort.saveUser(user);
+        return userPersistencePort.saveUser(user);
     }
 
     @Override

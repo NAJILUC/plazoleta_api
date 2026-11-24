@@ -31,7 +31,7 @@ public class UserHandler implements IUserHandler {
         Role role = roleServicePort.getRoleById(1L);
         User user = userRequestMapper.toUser(createUserRequest);
         user.setRoleId(role.getId());
-        userServicePort.saveUser(user);
+        user = userServicePort.saveUser(user);
         return userResponseMapper.toUserResponse(user, role);
     }
 
