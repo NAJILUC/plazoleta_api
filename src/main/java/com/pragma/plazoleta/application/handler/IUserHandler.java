@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IUserHandler {
 
-    UserResponse saveUser(CreateUserRequest createUserRequest);
+    UserResponse saveUser(CreateUserRequest createUserRequest, Long userLoggedId);
 
     UserResponse getUserById(Long id);
 
