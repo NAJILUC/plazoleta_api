@@ -1,0 +1,34 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: plazoleta
+  datasource:
+    url: jdbc:postgresql://localhost:5432/plazoleta
+    username: postgres
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    duration: ${JWT_DURATION:60}
+
+appDescription: "Plazoleta API"
+appVersion: "1.0"
+
+app:
+  admin:
+    first-name: ${ADMIN_FIRST_NAME:"System"}
+    last-name: ${ADMIN_LAST_NAME:"Administrator"}
+    identification-number: ${ADMIN_IDENTIFICATION_NUMBER:"999999999"}
+    phone-number: ${ADMIN_PHONE_NUMBER:+573000000000}
+    birth-date: ${ADMIN_BIRTH_DATE:2000-01-01}
+    email: ${ADMIN_EMAIL:admin@plazoleta.com}
+    password: ${ADMIN_PASSWORD:admin123}
