@@ -3,6 +3,7 @@ package com.pragma.plazoleta.infrastructure.exceptions;
 import com.pragma.plazoleta.application.dto.response.common.ErrorResponse;
 import com.pragma.plazoleta.domain.exception.InvalidCredentialsException;
 import com.pragma.plazoleta.domain.exception.MinorUserException;
+import com.pragma.plazoleta.domain.exception.UserNotOwnerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -80,6 +81,22 @@ public class GlobalExceptionHandler {
             MinorUserException exception) {
 
         ErrorCode errorCode = ErrorCode.MINOR_USER;
+
+        ErrorResponse response = new ErrorResponse(
+                errorCode.getCode(),
+                errorCode.getDescription()
+        );
+
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(response);
+    }
+
+    @ExceptionHandler(UserNotOwnerException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotOwner(
+            UserNotOwnerException exception) {
+
+        ErrorCode errorCode = ErrorCode.USER_NOT_OWNER;
 
         ErrorResponse response = new ErrorResponse(
                 errorCode.getCode(),
