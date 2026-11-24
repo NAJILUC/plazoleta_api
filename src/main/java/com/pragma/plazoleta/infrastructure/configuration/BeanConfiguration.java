@@ -1,19 +1,25 @@
 package com.pragma.plazoleta.infrastructure.configuration;
 
 import com.pragma.plazoleta.domain.api.IAuthServicePort;
+import com.pragma.plazoleta.domain.api.IRestaurantServicePort;
 import com.pragma.plazoleta.domain.api.IRoleServicePort;
 import com.pragma.plazoleta.domain.api.IUserServicePort;
+import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoleta.domain.spi.IRolePersistencePort;
 import com.pragma.plazoleta.domain.spi.IUserPersistencePort;
 import com.pragma.plazoleta.domain.spi.security.IPasswordEncoderPort;
 import com.pragma.plazoleta.domain.spi.security.ITokenProviderPort;
 import com.pragma.plazoleta.domain.usecase.AuthUseCase;
+import com.pragma.plazoleta.domain.usecase.RestaurantUseCase;
 import com.pragma.plazoleta.domain.usecase.RoleUseCase;
 import com.pragma.plazoleta.domain.usecase.UserUseCase;
+import com.pragma.plazoleta.infrastructure.output.jpa.adapter.RestaurantJpaAdapter;
 import com.pragma.plazoleta.infrastructure.output.jpa.adapter.RoleJpaAdapter;
 import com.pragma.plazoleta.infrastructure.output.jpa.adapter.UserJpaAdapter;
+import com.pragma.plazoleta.infrastructure.output.jpa.mapper.RestaurantEntityMapper;
 import com.pragma.plazoleta.infrastructure.output.jpa.mapper.RoleEntityMapper;
 import com.pragma.plazoleta.infrastructure.output.jpa.mapper.UserEntityMapper;
+import com.pragma.plazoleta.infrastructure.output.jpa.repository.IRestaurantRepository;
 import com.pragma.plazoleta.infrastructure.output.jpa.repository.IRoleRepository;
 import com.pragma.plazoleta.infrastructure.output.jpa.repository.IUserRepository;
 import com.pragma.plazoleta.infrastructure.security.BCryptPasswordEncoderAdapter;
@@ -32,7 +38,8 @@ public class BeanConfiguration {
     private final IRoleRepository roleRepository;
     private final RoleEntityMapper roleEntityMapper;
     private final JwtEncoder jwtEncoder;
-
+    private final IRestaurantRepository restaurantRepository;
+    private final RestaurantEntityMapper restaurantEntityMapper;
 
     @Bean
     public IUserPersistencePort userPersistencePort() {
@@ -71,4 +78,15 @@ public class BeanConfiguration {
         return new AuthUseCase(userPersistencePort, passwordEncoderPort, rolePersistencePort, tokenProviderPort
         );
     }
+
+    @Bean
+    public IRestaurantPersistencePort restaurantPersistencePort() {
+        return new RestaurantJpaAdapter(restaurantRepository, restaurantEntityMapper);
+    }
+    @Bean
+    public IRestaurantServicePort restaurantServicePort(IRestaurantPersistencePort restaurantPersistencePort) {
+        return new RestaurantUseCase(restaurantPersistencePort);
+    }
+
+
 }
